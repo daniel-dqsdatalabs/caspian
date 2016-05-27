@@ -1,0 +1,47 @@
+group 'data-lake'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.monochromeroad.gradle-plugins:gradle-aws-s3-sync:0.10"
+    }
+}
+
+apply plugin: "com.monochromeroad.s3sync"
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+
+}
+
+dependencies {
+    compile 'com.qubole.qds-sdk-java:qds-sdk-java:0.7.0'
+    compile name: 'prep-buddy-1.0-SNAPSHOT'
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+import com.monochromeroad.gradle.plugin.aws.s3.S3Sync
+
+task deploy(type: S3Sync) {
+    description = "Deploys my site on a s3 bucket."
+    def properties = new Properties()
+    properties.load(new FileInputStream("dev.properties"))
+    accessKey properties.getProperty("accessKey")
+    secretKey properties.getProperty("secretKey")
+
+    configFile "jets3t.properties"
+
+    from "build/libs"
+    into properties.getProperty("dev.workspace.path")
+}
