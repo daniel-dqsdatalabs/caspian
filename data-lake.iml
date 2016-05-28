@@ -32,7 +32,6 @@
     <orderEntry type="library" name="Gradle: org.glassfish.jersey.core:jersey-common:2.5" level="project" />
     <orderEntry type="library" name="Gradle: javax.ws.rs:javax.ws.rs-api:2.0" level="project" />
     <orderEntry type="library" name="Gradle: javax.annotation:javax.annotation-api:1.2" level="project" />
-    <orderEntry type="library" name="Gradle: joda-time:joda-time:2.9.3" level="project" />
     <orderEntry type="library" name="Gradle: org.glassfish.hk2:hk2-api:2.2.0-b21" level="project" />
     <orderEntry type="library" name="Gradle: org.glassfish.hk2:hk2-utils:2.2.0-b21" level="project" />
     <orderEntry type="library" name="Gradle: org.glassfish.hk2.external:asm-all-repackaged:2.2.0-b21" level="project" />
@@ -45,5 +44,6 @@
     <orderEntry type="library" name="Gradle: org.codehaus.jackson:jackson-core-asl:1.9.13" level="project" />
     <orderEntry type="library" name="Gradle: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.jackson:jackson-mapper-asl:1.9.13" level="project" />
+    <orderEntry type="library" name="Gradle: joda-time:joda-time:2.9.4" level="project" />
   </component>
 </module>

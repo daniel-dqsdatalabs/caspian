@@ -27,7 +27,6 @@ repositories {
 dependencies {
     compile 'com.qubole.qds-sdk-java:qds-sdk-java:0.7.0'
     compile name: 'prep-buddy-1.0-SNAPSHOT'
-
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
