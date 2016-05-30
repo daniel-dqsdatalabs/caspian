@@ -13,7 +13,7 @@ public class FlightDelayRecordGenerator {
 
     private static JavaSparkContext sc;
     private static String inputFileName;
-    private static String outputFilePath;
+    private static String outputFileName;
 
     private static void initialize(String[] args) {
         if (args.length != 2) {
@@ -24,7 +24,7 @@ public class FlightDelayRecordGenerator {
         SparkConf sparkConf = new SparkConf().setAppName("FlightDelayRecordGenerator");
         sc = new JavaSparkContext(sparkConf);
         inputFileName = args[0];
-        outputFilePath = args[1];
+        outputFileName = args[1];
     }
 
     public static void main(String[] args) throws IOException {
@@ -55,6 +55,6 @@ public class FlightDelayRecordGenerator {
             }
         });
 
-        new TransformableRDD(dimensionallyReducedFlightData).deduplicate().saveAsTextFile("s3://twi-analytics-sandbox/dev-workspaces/rahul/data/input/" + outputFilePath);
+        new TransformableRDD(dimensionallyReducedFlightData).deduplicate().saveAsTextFile("s3://twi-analytics-sandbox/dev-workspaces/rahul/data/input/" + outputFileName);
     }
 }
