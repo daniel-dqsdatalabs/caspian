@@ -13,4 +13,4 @@ hs_err_pid*
 lib/
 .gradle/
 build/
-dev.properties
+secret.properties
