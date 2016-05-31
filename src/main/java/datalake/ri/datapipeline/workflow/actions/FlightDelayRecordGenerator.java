@@ -7,7 +7,10 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Properties;
 
 public class FlightDelayRecordGenerator {
 
@@ -15,12 +18,15 @@ public class FlightDelayRecordGenerator {
     private static String inputFileName;
     private static String outputFileName;
 
-    private static void initialize(String[] args) {
+    private static void initialize(String[] args) throws IOException {
         if (args.length != 2) {
             System.out.println("Invalid Length of Arguments");
             System.exit(1);
         }
-
+        Properties properties = new Properties();
+        properties.load(new FileInputStream("secret.properties"));
+        String property = properties.getProperty("dev.workspace.path");
+        System.out.println("property = " + property);
         SparkConf sparkConf = new SparkConf().setAppName("FlightDelayRecordGenerator");
         sc = new JavaSparkContext(sparkConf);
         inputFileName = args[0];

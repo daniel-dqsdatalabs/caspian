@@ -27,10 +27,11 @@ repositories {
 jar {
     from {
         "secret.properties"
+        "libs/prep-buddy-1.0-SNAPSHOT.jar"
     }
     manifest {
         attributes(
-                "Class-Path":"secret.properties")
+                "Class-Path":"secret.properties","libs/prep-buddy-1.0-SNAPSHOT.jar")
     }
 }
 
