@@ -5,31 +5,13 @@ import org.apache.prepbuddy.normalizers.ZScoreNormalization;
 import org.apache.prepbuddy.rdds.TransformableRDD;
 import org.apache.prepbuddy.typesystem.FileType;
 import org.apache.prepbuddy.utils.RowRecord;
-import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 
-public class FlightDelayRecordNormalizer {
-    private static JavaSparkContext sc;
-    private static String inputFileName;
-    private static String outputFileName;
-
-    private static void initialize(String[] args) {
-        if (args.length != 2) {
-            System.out.println("Invalid Length of Arguments");
-            System.exit(1);
-        }
-
-        SparkConf sparkConf = new SparkConf().setAppName("FlightDelayRecordGenerator");
-        sc = new JavaSparkContext(sparkConf);
-        inputFileName = args[0];
-        outputFileName = args[1];
-    }
-
+public class FlightDelayRecordNormalizer extends FlightDelayPipeline{
     public static void main(String[] args) {
         initialize(args);
-        TransformableRDD travelledFlights = new TransformableRDD(sc.textFile("s3://twi-analytics-sandbox/dev-workspaces/rahul/data/input/" + inputFileName));
+        TransformableRDD travelledFlights = new TransformableRDD(javaSparkContext.textFile("s3://twi-analytics-sandbox/dev-workspaces/" + user + "/data/input/" + inputFileName));
 
         JavaRDD<String> normalizedData = travelledFlights
                 .deduplicate()
@@ -58,6 +40,6 @@ public class FlightDelayRecordNormalizer {
                     }
                 });
 
-        normalizedData.saveAsTextFile("s3://twi-analytics-sandbox/dev-workspaces/rahul/data/normalized/" + outputFileName);
+        normalizedData.saveAsTextFile("s3://twi-analytics-sandbox/dev-workspaces/" + user + "/data/normalized/" + outputFileName);
     }
 }
