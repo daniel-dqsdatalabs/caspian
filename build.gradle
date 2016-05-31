@@ -24,6 +24,16 @@ repositories {
 
 }
 
+jar {
+    from {
+        "secret.properties"
+    }
+    manifest {
+        attributes(
+                "Class-Path":"secret.properties")
+    }
+}
+
 dependencies {
     compile name: 'prep-buddy-1.0-SNAPSHOT'
     compile 'org.apache.spark:spark-core_2.11:1.6.1'
