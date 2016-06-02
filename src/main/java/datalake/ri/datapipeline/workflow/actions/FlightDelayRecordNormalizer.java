@@ -13,7 +13,7 @@ public class FlightDelayRecordNormalizer extends FlightDelayPipeline{
         initialize(args);
         TransformableRDD travelledFlights = new TransformableRDD(javaSparkContext.textFile("s3://twi-analytics-sandbox/dev-workspaces/" + user + "/data/input/" + inputFileName));
 
-        JavaRDD<String> normalizedData = travelledFlights
+        TransformableRDD normalizedData = travelledFlights
                 .deduplicate()
                 .removeRows(new RowPurger.Predicate() {
                     @Override
