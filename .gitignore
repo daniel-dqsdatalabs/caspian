@@ -14,3 +14,4 @@ lib/
 .gradle/
 build/
 secret.properties
+resources/
