@@ -13,5 +13,7 @@ hs_err_pid*
 lib/
 .gradle/
 build/
-secret.properties
+/secret.properties
 resources/
+*.pyc
+data-pipelines/actions/secret.properties
