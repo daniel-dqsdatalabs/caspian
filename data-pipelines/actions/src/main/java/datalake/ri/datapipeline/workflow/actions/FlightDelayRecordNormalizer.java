@@ -3,12 +3,10 @@ package datalake.ri.datapipeline.workflow.actions;
 import org.apache.prepbuddy.datacleansers.RowPurger;
 import org.apache.prepbuddy.normalizers.ZScoreNormalization;
 import org.apache.prepbuddy.rdds.TransformableRDD;
-import org.apache.prepbuddy.typesystem.FileType;
+import org.apache.prepbuddy.utils.ReplacementFunction;
 import org.apache.prepbuddy.utils.RowRecord;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.function.Function;
 
-public class FlightDelayRecordNormalizer extends FlightDelayPipeline{
+public class FlightDelayRecordNormalizer extends FlightDelayPipeline {
     public static void main(String[] args) {
         initialize(args);
         TransformableRDD travelledFlights = new TransformableRDD(javaSparkContext.textFile("s3://twi-analytics-sandbox/dev-workspaces/" + user + "/data/input/" + inputFileName));
@@ -29,14 +27,11 @@ public class FlightDelayRecordNormalizer extends FlightDelayPipeline{
                 .normalize(2, new ZScoreNormalization())
                 .normalize(3, new ZScoreNormalization())
                 .normalize(4, new ZScoreNormalization())
-                .map(new Function<String, String>() {
+                .replace(5, new ReplacementFunction() {
                     @Override
-                    public String call(String record) throws Exception {
-                        String[] recordAsArray = FileType.CSV.parseRecord(record);
-                        double arrivalDelay = Double.parseDouble(recordAsArray[5]);
-                        String label = arrivalDelay >= 10 ? "1" : "0";
-                        recordAsArray[5] = label;
-                        return FileType.CSV.join(recordAsArray);
+                    public String replace(RowRecord rowRecord) {
+                        double arrivalDelay = Double.parseDouble(rowRecord.valueAt(5));
+                        return arrivalDelay >= 10 ? "1" : "0";
                     }
                 });
 
