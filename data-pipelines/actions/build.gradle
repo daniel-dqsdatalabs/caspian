@@ -1,7 +1,7 @@
-group 'data-lake'
+group 'com.tw'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
+apply plugin: 'scala'
 
 buildscript {
     repositories {
@@ -18,14 +18,10 @@ apply plugin: "com.monochromeroad.s3sync"
 
 repositories {
     mavenCentral()
-    flatDir {
-        dirs 'libs'
-    }
-
 }
 
 dependencies {
-    compile name: 'prep-buddy-1.0-SNAPSHOT'
+    compile group: 'com.thoughtworks.datacommons', name: 'prep-buddy', version: '0.5.0'
     compile 'org.apache.spark:spark-core_2.11:1.6.1'
     compile 'org.apache.spark:spark-mllib_2.11:1.6.1'
 
@@ -38,8 +34,8 @@ jar{
 
 import com.monochromeroad.gradle.plugin.aws.s3.S3Sync
 
-task deploy(type: S3Sync) {
-    description = "Deploys my site on a s3 bucket."
+task syncData(type: S3Sync) {
+    description = "Deploys my data on a s3 bucket."
     def properties = new Properties()
     properties.load(new FileInputStream("secret.properties"))
     accessKey properties.getProperty("accessKey")
@@ -47,6 +43,6 @@ task deploy(type: S3Sync) {
 
     configFile "jets3t.properties"
 
-    from "build/libs"
-    into properties.getProperty("dev.workspace.path")
+    from "tpch-benchmark-datasets"
+    into properties.getProperty("data.path")
 }
