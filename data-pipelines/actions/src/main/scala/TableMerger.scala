@@ -7,7 +7,7 @@ class TableMerger(primaryTable: RDD[String], otherTable: RDD[String]) {
         val primary = tableByIndex(primaryTable, foreignKeyIndex)
         val transformedTable = primary.join(other)
         transformedTable.map {
-            case (key, (pTable, oTable)) => CSV.appendDelimiter(pTable) + oTable
+            case (_, (pTable, oTable)) => CSV.appendDelimiter(pTable) + oTable
         }
     }
 
