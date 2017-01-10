@@ -1,28 +1,35 @@
 #!/usr/bin/env bash
+CONNECTION_URL="jdbc:postgresql://localhost:5432/tpch-benchmark"
+USERNAME="postgres"
+DATA_SET_PATH="../tpch-benchmark-datasets/s-factor-1/"
 
-sqoop import --connect jdbc:postgresql://localhost:5432/tpch-benchmark\
- --username postgres \
+sqoop import --connect ${CONNECTION_URL}\
+ --username ${USERNAME} \
  --password ${PASSWORD} \
  --m 1  \
  --table nation \
- --target-dir  ../tpch-benchmark-datasets/s-factor-1/nation/ \
+ --target-dir  ${DATA_SET_PATH}/nation/ \
  --optionally-enclosed-by '\"' \
  -- --schema raw_store;
 
-sqoop import --connect jdbc:postgresql://localhost:5432/tpch-benchmark\
- --username postgres \
+sqoop import --connect ${CONNECTION_URL}\
+ --username ${USERNAME} \
  --password ${PASSWORD} \
  --m 1  \
  --table region \
- --target-dir  ../tpch-benchmark-datasets/s-factor-1/region/ \
+ --target-dir  ${DATA_SET_PATH}/region/ \
  --optionally-enclosed-by '\"' \
  -- --schema raw_store;
 
-rm nation.java region.java
+spark-submit --jars ../jars/prep-buddy-0.5.0-jar-with-dependencies.jar \
+  --class NationDimension ../build/libs/data-lake-1.0-SNAPSHOT.jar ${DATA_SET_PATH};
 
-spark-submit --jars prep-buddy.jar --class NationDimension data-lake.jar "";
+sqoop export --connect ${CONNECTION_URL} \
+ --username ${USERNAME} \
+ --password ${PASSWORD} \
+ --table nation_dim \
+ --export-dir ${DATA_SET_PATH}/deNormalizedNationTable \
+ --optionally-enclosed-by '\"' -m 1 \
+ -- --schema tpch_star_schema;
 
-sqoop export --connect --connect jdbc:postgresql://localhost:5432/tpch-benchmark \
- --username postgres --password ${PASSWORD} --table nation_dim \
- --export-dir deNormalizedNationTable \
- --optionally-enclosed-by '\"' -m 1 -- --schema tpch_star_schema;
+rm *.java
