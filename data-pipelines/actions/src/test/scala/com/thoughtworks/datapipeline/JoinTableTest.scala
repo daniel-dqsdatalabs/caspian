@@ -1,3 +1,6 @@
+package com.thoughtworks.datapipeline
+
+import com.thoughtworks.pipeline.TableMerger
 import org.apache.spark.rdd.RDD
 
 class JoinTableTest extends SparkTestCase{

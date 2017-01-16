@@ -1,3 +1,5 @@
+package com.thoughtworks.datapipeline
+
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.{SparkConf, SparkContext}
 import org.scalatest.{BeforeAndAfterEach, FunSuite}

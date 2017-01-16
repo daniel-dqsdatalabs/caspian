@@ -1,3 +1,5 @@
+package com.thoughtworks.pipeline
+
 import com.thoughtworks.datacommons.prepbuddy.rdds.TransformableRDD
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
@@ -11,6 +13,6 @@ object NationDimension {
         val regionTable  = new TransformableRDD(sc.textFile(path+"region"))
         val merger: TableMerger = new TableMerger(nationTable,regionTable)
         val transformedNationTable: RDD[String] = merger.merge(0,2)
-        transformedNationTable.saveAsTextFile(path+"deNormalizedNationTable")
+        transformedNationTable.saveAsTextFile(path+"dimNationTable")
     }
 }

@@ -1,3 +1,5 @@
+package com.thoughtworks.pipeline
+
 import com.thoughtworks.datacommons.prepbuddy.types.CSV
 import org.apache.spark.rdd.RDD
 

@@ -7,8 +7,8 @@ from templete import s3_bucket, import_cmd_template, export_cmd_template, spark_
 sync_jars = "aws s3 sync " + s3_bucket + "jars/ ."
 import_nation = import_cmd_template.format(table="nation")
 import_region = import_cmd_template.format(table="region")
-spark_transformation = spark_job_template.format(mainClass="NationDimension", args=s3_bucket)
-export_nation = export_cmd_template.format(table="nation_dim", inputPath="deNormalizedNationTable")
+spark_dimNation = spark_job_template.format(mainClass="com.thoughtworks.pipeline.NationDimension", args=s3_bucket)
+export_dimNation = export_cmd_template.format(table="nation_dim", inputPath="dimNationTable")
 
 default_args = {
     'owner': 'thoughtworks',
@@ -45,14 +45,14 @@ task2 = SSHExecuteOperator(
     dag=dag)
 
 task3 = SSHExecuteOperator(
-    task_id="spark_job",
-    bash_command=spark_transformation,
+    task_id="spark_dimNation",
+    bash_command=spark_dimNation,
     ssh_hook=sshHook,
     dag=dag)
 
 task4 = SSHExecuteOperator(
-    task_id="export_nation",
-    bash_command=export_nation,
+    task_id="export_dimNation",
+    bash_command=export_dimNation,
     ssh_hook=sshHook,
     dag=dag)
 
