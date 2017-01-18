@@ -1,5 +1,6 @@
 package com.thoughtworks.datapipeline
 
+import com.thoughtworks.SparkTestCase
 import com.thoughtworks.pipeline.TableMerger
 import org.apache.spark.rdd.RDD
 
