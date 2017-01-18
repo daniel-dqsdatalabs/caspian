@@ -21,14 +21,41 @@ sqoop import --connect ${CONNECTION_URL}\
  --optionally-enclosed-by '\"' \
  -- --schema raw_store;
 
+ sqoop import --connect ${CONNECTION_URL}\
+ --username ${USERNAME} \
+ --password ${PASSWORD} \
+ --m 1  \
+ --table supplier \
+ --target-dir  ${DATA_SET_PATH}/supplier/ \
+ --optionally-enclosed-by '\"' \
+ -- --schema raw_store;
+
+sqoop import --connect ${CONNECTION_URL}\
+ --username ${USERNAME} \
+ --password ${PASSWORD} \
+ --m 1  \
+ --table customer \
+ --target-dir  ${DATA_SET_PATH}/customer/ \
+ --optionally-enclosed-by '\"' \
+ -- --schema raw_store;
+
+ sqoop import --connect ${CONNECTION_URL}\
+ --username ${USERNAME} \
+ --password ${PASSWORD} \
+ --m 1  \
+ --table part \
+ --target-dir  ${DATA_SET_PATH}/part/ \
+ --optionally-enclosed-by '\"' \
+ -- --schema raw_store;
+
 spark-submit --jars ../jars/prep-buddy-0.5.0-jar-with-dependencies.jar \
-  --class NationDimension ../build/libs/data-lake-1.0-SNAPSHOT.jar ${DATA_SET_PATH};
+  --class com.thoughtworks.pipeline.DimensionTransformation ../build/libs/data-lake-1.0-SNAPSHOT.jar ${DATA_SET_PATH};
 
 sqoop export --connect ${CONNECTION_URL} \
  --username ${USERNAME} \
  --password ${PASSWORD} \
  --table nation_dim \
- --export-dir ${DATA_SET_PATH}/deNormalizedNationTable \
+ --export-dir ${DATA_SET_PATH}/dimNation \
  --optionally-enclosed-by '\"' -m 1 \
  -- --schema tpch_star_schema;
 

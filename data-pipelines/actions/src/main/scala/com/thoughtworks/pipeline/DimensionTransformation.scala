@@ -10,7 +10,7 @@ object DimensionTransformation {
     val surrogateKeyGenerator = new SurrogateKeyGenerator()
 
     def setSparkContext(): Unit = {
-        val conf: SparkConf = new SparkConf().setAppName(getClass.getName).setMaster("local")
+        val conf: SparkConf = new SparkConf().setAppName(getClass.getName)
         sc = new SparkContext(conf)
     }
 
@@ -37,7 +37,7 @@ object DimensionTransformation {
         val path = args(0)
         val nationTable = new TransformableRDD(sc.textFile(path + "nation"))
         val regionTable = new TransformableRDD(sc.textFile(path + "region"))
-        nationDim(nationTable, regionTable).saveAsTextFile(path + "dimNationTable")
+        nationDim(nationTable, regionTable).saveAsTextFile(path + "dimNation")
 
         val customerTable = new TransformableRDD(sc.textFile(path + "customer"))
         customerDim(customerTable).saveAsTextFile(path + "dimCustomer")
