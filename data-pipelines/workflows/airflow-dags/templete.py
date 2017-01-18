@@ -17,4 +17,9 @@ export_cmd_template = sqoop_cmd_template.format(action="export") + \
                       "-- --schema tpch_star_schema;"
 
 spark_job_template = "spark-submit --jars prep-buddy.jar " + \
-            "--class {mainClass} data-lake.jar {args}"
+                     "--class {mainClass} data-lake.jar {args}"
+
+import_all_cmd_template = sqoop_cmd_template.format(action="import-all-tables") + \
+                          "--warehouse-dir " + s3_bucket + " " + \
+                          "--exclude-tables {exclude_tables} " + " " + \
+                          "-- --schema raw_store ;"

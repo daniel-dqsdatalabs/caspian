@@ -3,49 +3,12 @@ CONNECTION_URL="jdbc:postgresql://localhost:5432/tpch-benchmark"
 USERNAME="postgres"
 DATA_SET_PATH="../tpch-benchmark-datasets/s-factor-1/"
 
-sqoop import --connect ${CONNECTION_URL}\
+sqoop import-all-tables --connect ${CONNECTION_URL}\
  --username ${USERNAME} \
  --password ${PASSWORD} \
- --m 1  \
- --table nation \
- --target-dir  ${DATA_SET_PATH}/nation/ \
+ --m 1  --exclude-tables lineitem,orders,partsupp \
  --optionally-enclosed-by '\"' \
- -- --schema raw_store;
-
-sqoop import --connect ${CONNECTION_URL}\
- --username ${USERNAME} \
- --password ${PASSWORD} \
- --m 1  \
- --table region \
- --target-dir  ${DATA_SET_PATH}/region/ \
- --optionally-enclosed-by '\"' \
- -- --schema raw_store;
-
- sqoop import --connect ${CONNECTION_URL}\
- --username ${USERNAME} \
- --password ${PASSWORD} \
- --m 1  \
- --table supplier \
- --target-dir  ${DATA_SET_PATH}/supplier/ \
- --optionally-enclosed-by '\"' \
- -- --schema raw_store;
-
-sqoop import --connect ${CONNECTION_URL}\
- --username ${USERNAME} \
- --password ${PASSWORD} \
- --m 1  \
- --table customer \
- --target-dir  ${DATA_SET_PATH}/customer/ \
- --optionally-enclosed-by '\"' \
- -- --schema raw_store;
-
- sqoop import --connect ${CONNECTION_URL}\
- --username ${USERNAME} \
- --password ${PASSWORD} \
- --m 1  \
- --table part \
- --target-dir  ${DATA_SET_PATH}/part/ \
- --optionally-enclosed-by '\"' \
+ --warehouse-dir ${DATA_SET_PATH} \
  -- --schema raw_store;
 
 spark-submit --jars ../jars/prep-buddy-0.5.0-jar-with-dependencies.jar \
