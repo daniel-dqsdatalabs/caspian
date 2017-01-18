@@ -9,8 +9,8 @@ class SurrogateKeyGeneratorTest extends SparkTestCase {
     test("should be able to add surrogate key on the first column of the table") {
         val nationTable: RDD[String] = sc.parallelize(List("0,ALGERIA,\"haggle.,is here\",AFRICA,\"regular ,deposits.\""))
         val transformableRDD = new TransformableRDD(nationTable)
-        val surrogateKey: SurrogateKeyGenerator = new SurrogateKeyGenerator(transformableRDD)
-        val tableWithSurrogateKey: RDD[String] = surrogateKey.addSurrogateKey()
+        val surrogateKey: SurrogateKeyGenerator = new SurrogateKeyGenerator()
+        val tableWithSurrogateKey: RDD[String] = surrogateKey.addSurrogateKey(transformableRDD)
 
 
         assert(tableWithSurrogateKey.collect().head == "0,0,ALGERIA,\"haggle.,is here\",AFRICA,\"regular ,deposits.\"")
