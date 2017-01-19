@@ -39,3 +39,4 @@ project/plugins/project/
 tpch-benchmark-datasets/
 secret.properties
 .idea/
+/scripts/uploadJars.sh

@@ -32,6 +32,14 @@ object DimensionTransformation {
         surrogateKeyGenerator.addSurrogateKey(partTable)
     }
 
+    def dateDim: TransformableRDD = {
+        val dimension = new DateDimension()
+        val range = dimension.calculateDates("2005 01 01", "2020 12 31")
+        val dates = sc.parallelize(range).map(_.toString)
+        val dateRange = new TransformableRDD(dates)
+        surrogateKeyGenerator.addSurrogateKey(dateRange)
+    }
+
     def main(args: Array[String]) {
         setSparkContext()
         val path = args(0)
@@ -48,6 +56,7 @@ object DimensionTransformation {
         val partTable = new TransformableRDD(sc.textFile(path + "part"))
         partDim(partTable).saveAsTextFile(path + "dimPart")
 
+        dateDim.saveAsTextFile(path + "dimDate")
         sc.stop()
     }
 
