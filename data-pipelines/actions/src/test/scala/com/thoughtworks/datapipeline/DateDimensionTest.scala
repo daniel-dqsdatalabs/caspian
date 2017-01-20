@@ -17,7 +17,7 @@ class DateDimensionTest extends FunSuite {
 
     test("should give the dates between specified date in yyyy MM dd format") {
         val dimension = new DateDimension()
-        val dateRange = dimension.calculateDates("2014 01 01", "2014 12 31")
+        val dateRange = dimension.calculateDates("2014-01-01", "2014-12-31")
         assert(dateRange.length == 365)
     }
 

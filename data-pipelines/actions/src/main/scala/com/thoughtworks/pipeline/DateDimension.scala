@@ -8,11 +8,11 @@ import org.apache.commons.lang.time.DateUtils
 import scala.collection.mutable.ListBuffer
 
 class DateDimension {
-    def calculateDates(from: String, until: String): List[Date] = {
-        val format = new SimpleDateFormat("yyyy MM dd")
-        val fromDate = format.parse(from)
-        val untilDate = format.parse(until)
-        calculateDates(fromDate, untilDate)
+    def calculateDates(from: String, until: String): List[String] = {
+        val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
+        val fromDate = dateFormat.parse(from)
+        val untilDate = dateFormat.parse(until)
+        calculateDates(fromDate, untilDate).map(dateFormat.format)
     }
 
     def calculateDates(from: Date, until: Date): List[Date] = {

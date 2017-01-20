@@ -34,9 +34,8 @@ object  DimensionTransformation {
 
     def dateDim: TransformableRDD = {
         val dimension = new DateDimension()
-        val range = dimension.calculateDates("2005 01 01", "2020 12 31")
-        val dates = sc.parallelize(range).map(_.toString)
-        val dateRange = new TransformableRDD(dates)
+        val range = dimension.calculateDates("2010-01-01", "2020-12-31")
+        val dateRange = sc.parallelize(range)
         surrogateKeyGenerator.addSurrogateKey(dateRange)
     }
 
