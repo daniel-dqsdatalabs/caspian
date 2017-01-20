@@ -6,7 +6,7 @@ DATA_SET_PATH="../tpch-benchmark-datasets/s-factor-1/"
 sqoop import-all-tables --connect ${CONNECTION_URL}\
  --username ${USERNAME} \
  --password ${PASSWORD} \
- --m 1  --exclude-tables lineitem,orders,partsupp \
+ --m 1  --exclude-tables partsupp \
  --optionally-enclosed-by '\"' \
  --warehouse-dir ${DATA_SET_PATH} \
  -- --schema raw_store;

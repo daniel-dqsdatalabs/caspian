@@ -5,7 +5,7 @@ import com.thoughtworks.datacommons.prepbuddy.rdds.TransformableRDD
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
-object DimensionTransformation {
+object  DimensionTransformation {
     var sc: SparkContext = _
     val surrogateKeyGenerator = new SurrogateKeyGenerator()
 

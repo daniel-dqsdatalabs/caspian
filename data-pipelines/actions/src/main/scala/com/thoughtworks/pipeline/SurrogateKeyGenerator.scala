@@ -4,7 +4,7 @@ import com.thoughtworks.datacommons.prepbuddy.rdds.TransformableRDD
 import com.thoughtworks.datacommons.prepbuddy.types.CSV
 import com.thoughtworks.datacommons.prepbuddy.utils.RowRecord
 
-class SurrogateKeyGenerator() {
+class SurrogateKeyGenerator {
     def addSurrogateKey(primaryTable: TransformableRDD): TransformableRDD = {
         val withSurrogateKey = primaryTable.zipWithIndex().map((tuple) => {
             val key = new RowRecord(Array(tuple._2.toString))
