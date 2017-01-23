@@ -1,6 +1,7 @@
 package com.thoughtworks.pipeline
 
 import com.thoughtworks.datacommons.prepbuddy.rdds.TransformableRDD
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -11,6 +12,8 @@ object FactTransformation {
 
     def setSparkContext(): Unit = {
         val conf: SparkConf = new SparkConf().setAppName(getClass.getName)
+        Logger.getLogger("org").setLevel(Level.WARN)
+        Logger.getLogger("akka").setLevel(Level.WARN)
         sc = new SparkContext(conf)
     }
 
@@ -37,6 +40,7 @@ object FactTransformation {
         val lineItemTable = new TransformableRDD(sc.textFile(path + "lineitem"))
         val ordersTable = new TransformableRDD(sc.textFile(path + "orders"))
         val salesJoinedTable = salesFact(lineItemTable, ordersTable)
-        salesJoinedTable.saveAsTextFile(path+"salesFact")
+        salesJoinedTable.saveAsTextFile(path + "factSales")
+        sc.stop()
     }
 }

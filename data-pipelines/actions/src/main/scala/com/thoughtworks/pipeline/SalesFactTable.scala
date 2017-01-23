@@ -1,8 +1,7 @@
 package com.thoughtworks.pipeline
 
-import com.thoughtworks.datacommons.prepbuddy.types.CSV
-import com.thoughtworks.datacommons.prepbuddy.utils.RowRecord
 import com.thoughtworks.datacommons.prepbuddy.rdds.TransformableRDD
+import com.thoughtworks.datacommons.prepbuddy.types.CSV
 import org.apache.spark.rdd.RDD
 
 class SalesFactTable(joinedTable: RDD[String]) {
