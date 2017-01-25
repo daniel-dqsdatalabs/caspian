@@ -22,7 +22,7 @@ object FactTransformation {
         val merger: TableMerger = new TableMerger(lineItemTable, ordersTable)
         val joinedTable = merger.merge(0, 0, preserveKey = true)
         val factTable = new SalesFactTable(joinedTable)
-        val dateDimension = sc.textFile(path + "dimDate")
+        val dateDimension = sc.textFile(path + dimensionPath + "dimDate")
         val salesTable = factTable
             .replaceWithSurrogateKey(sc.textFile(path + dimensionPath + "dimPart"), 1)
             .replaceWithSurrogateKey(sc.textFile(path + dimensionPath + "dimSupplier"), 2)
@@ -38,8 +38,9 @@ object FactTransformation {
     def main(args: Array[String]): Unit = {
         path = args(0)
         setSparkContext()
-        val lineItemTable = new TransformableRDD(sc.textFile(path + "lineitem"))
-        val ordersTable = new TransformableRDD(sc.textFile(path + "orders"))
+        val importsPath = "imports/"
+        val lineItemTable = new TransformableRDD(sc.textFile(path + importsPath + "lineitem"))
+        val ordersTable = new TransformableRDD(sc.textFile(path + importsPath + "orders"))
         val salesJoinedTable = salesFact(lineItemTable, ordersTable)
         salesJoinedTable.saveAsTextFile(path + "facts/factSales")
         sc.stop()

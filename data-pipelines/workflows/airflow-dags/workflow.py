@@ -13,12 +13,13 @@ spark_process_dimension = spark_job_template.format(
 spark_process_facts = spark_job_template.format(
     mainClass="com.thoughtworks.pipeline.FactTransformation",
     args=s3_bucket)
-export_dimNation = export_cmd_template.format(table="nation_dim", inputPath="dimNation")
-export_dimCustomer = export_cmd_template.format(table="customer_dim", inputPath="dimCustomer")
-export_dimSupplier = export_cmd_template.format(table="supplier_dim", inputPath="dimSupplier")
-export_dimPart = export_cmd_template.format(table="part_dim", inputPath="dimPart")
-export_dimDate = export_cmd_template.format(table="date_dim", inputPath="dimDate")
-export_salesFact = export_cmd_template.format(table="sales_fact", inputPath="factSales")
+
+export_dimNation = export_cmd_template.format(table="nation_dim", inputPath="dimensions/dimNation")
+export_dimCustomer = export_cmd_template.format(table="customer_dim", inputPath="dimensions/dimCustomer")
+export_dimSupplier = export_cmd_template.format(table="supplier_dim", inputPath="dimensions/dimSupplier")
+export_dimPart = export_cmd_template.format(table="part_dim", inputPath="dimensions/dimPart")
+export_dimDate = export_cmd_template.format(table="date_dim", inputPath="dimensions/dimDate")
+export_salesFact = export_cmd_template.format(table="sales_fact", inputPath="facts/factSales")
 
 default_args = {
     'owner': 'thoughtworks',
@@ -98,10 +99,5 @@ task9 = SSHExecuteOperator(
 
 task0.set_downstream(task1)
 task1.set_downstream(task2)
-task2.set_downstream(task3)
-task3.set_downstream(task4)
-task4.set_downstream(task5)
-task5.set_downstream(task6)
-task6.set_downstream(task7)
-task7.set_downstream(task8)
-task8.set_downstream(task9)
+task3.set_upstream(task2)
+task3.set_downstream(task_or_task_list=[task4, task5, task6, task7, task8, task9])
