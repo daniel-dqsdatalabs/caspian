@@ -3,7 +3,6 @@ from credentials import *
 sqoop_cmd_template = "sqoop {action} " \
                      "--connect " + rds_store_uri + " " + \
                      "--username {username} --password {password} " \
-                     "-m 1 " \
                      "--optionally-enclosed-by '\"' ".format(username=username, password=password)
 
 import_cmd_template = sqoop_cmd_template.format(action="import") + \
