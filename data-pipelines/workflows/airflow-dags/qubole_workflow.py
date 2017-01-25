@@ -6,10 +6,10 @@ from qubole_templete import *
 
 spark_process_dimension = spark_job_template.format(
     mainClass="com.thoughtworks.pipeline.DimensionTransformation",
-    args=s3_bucket+"dimensions/")
+    args=s3_bucket)
 spark_process_facts = spark_job_template.format(
     mainClass="com.thoughtworks.pipeline.FactTransformation",
-    args=s3_bucket+"facts/")
+    args=s3_bucket)
 
 import_nation = import_cmd_template.format(table="nation")
 import_region = import_cmd_template.format(table="region")
@@ -131,9 +131,5 @@ task2.set_upstream(task_or_task_list=[task_import_lineitem, task_import_orders, 
                                       task_import_region, task_import_supplier, task_import_customer,
                                       task_import_nation])
 task3.set_upstream(task2)
-task3.set_downstream(task4)
-task4.set_downstream(task5)
-task5.set_downstream(task6)
-task6.set_downstream(task7)
-task7.set_downstream(task8)
-task8.set_downstream(task9)
+
+task3.set_downstream(task_or_task_list=[task4, task5, task6, task7, task8, task9])

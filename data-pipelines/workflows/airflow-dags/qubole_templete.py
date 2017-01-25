@@ -7,11 +7,11 @@ sqoop_cmd_template = "/usr/lib/sqoop/bin/sqoop {action} " \
 
 import_cmd_template = sqoop_cmd_template.format(action="import") + \
                       "--table {table} " \
-                      "--warehouse-dir " + s3_bucket_key + "imports/" + \
+                      "--warehouse-dir " + s3_bucket_key + "imports/ " + \
                       "--schema raw_store ;"
 
 import_all_cmd_template = sqoop_cmd_template.format(action="import-all-tables") + \
-                          "--warehouse-dir " + s3_bucket_key + "imports/" + \
+                          "--warehouse-dir " + s3_bucket_key + "imports/ " + \
                           "--exclude-tables {exclude_tables} " + " " + \
                           "--schema raw_store ;"
 
