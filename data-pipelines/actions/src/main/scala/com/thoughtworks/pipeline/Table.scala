@@ -20,14 +20,12 @@ class Table(tableRecords: RDD[String], primaryKeyIndex: Int = 0) {
 
     private def tableByIndex(table: RDD[String], columnIndex: Int, preserve: Boolean = false): RDD[(String, String)] = {
         table.map((record) => {
-            val parse = CSV.parse(record)
-            val range = 0 until parse.length
+            val parse = CSVParser.parse(record)
             if (preserve) {
-                (parse.select(columnIndex), record)
+                (parse(columnIndex), record)
             } else {
-                val selection = range.toBuffer.filter(x => x != columnIndex).toList
-                val filtered = parse.select(selection)
-                (parse.select(columnIndex), CSV.join(filtered))
+                val unzip = parse.zipWithIndex.collect { case (value, key) if key != columnIndex => value }
+                (parse(columnIndex), CSVParser.makeCSV(unzip))
             }
         })
     }

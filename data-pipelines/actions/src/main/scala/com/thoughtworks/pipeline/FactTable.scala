@@ -1,7 +1,6 @@
 package com.thoughtworks.pipeline
 
 import com.thoughtworks.datacommons.prepbuddy.types.CSV
-import com.thoughtworks.datacommons.prepbuddy.utils.RowRecord
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
 
@@ -12,11 +11,9 @@ class FactTable(joinedTable: Table) {
     def saveAsTextFile(path: String): Unit = joinedTable.saveAsTextFile(path)
 
     def addSurrogateKey(): FactTable = {
-        val withSurrogateKey = joinedTable.toRDD.zipWithIndex().map((tuple) => {
-            val key = new RowRecord(Array(tuple._2.toString))
-            val record = CSV.parse(tuple._1).map(x => x).toArray
-            CSV.join(key.appendColumns(record))
-        })
+        val withSurrogateKey = joinedTable.toRDD.zipWithIndex().map {
+            case (record, key) => CSVParser.makeCSV(key.toString +: CSVParser.parse(record))
+        }
         new FactTable(new Table(withSurrogateKey))
     }
 
@@ -34,8 +31,8 @@ class FactTable(joinedTable: Table) {
     private def tableToBroadcast(dimensionTable: Table): Broadcast[Map[String, String]] = {
         val sc = dimensionTable.toRDD.sparkContext
         val keyValue = dimensionTable.toRDD.map((x) => {
-            val parse = CSV.parse(x)
-            (parse.select(1), parse.select(0))
+            val parse = CSVParser.parse(x)
+            (parse(1), parse.head)
         })
         sc.broadcast(keyValue.collectAsMap())
     }
