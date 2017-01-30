@@ -2,3 +2,4 @@ credentials.py
 *.pyc
 .idea/
 cluster.sh
+airflow-logs/

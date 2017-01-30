@@ -1,18 +1,21 @@
 package com.thoughtworks.pipeline
 
-import com.thoughtworks.datacommons.prepbuddy.rdds.TransformableRDD
 import com.thoughtworks.datacommons.prepbuddy.types.CSV
 import org.apache.spark.rdd.RDD
 
-class TableMerger(primaryTable: RDD[String], otherTable: RDD[String]) {
-    def merge(primaryKeyIndex: Int, foreignKeyIndex: Int, preserveKey: Boolean = false): TransformableRDD = {
-        val other = tableByIndex(otherTable, primaryKeyIndex)
-        val primary = tableByIndex(primaryTable, foreignKeyIndex, preserveKey)
+class Table(tableRecords: RDD[String], primaryKeyIndex: Int = 0) {
+    def saveAsTextFile(path: String): Unit = toRDD.saveAsTextFile(path)
+
+    def toRDD: RDD[String] = tableRecords
+
+    def merge(child: Table, foreignKeyIndex: Int, preserveNaturalKey: Boolean = false): Table = {
+        val other = tableByIndex(child.toRDD, primaryKeyIndex)
+        val primary = tableByIndex(tableRecords, foreignKeyIndex, preserveNaturalKey)
         val transformedTable = primary.join(other)
         val joinedTable = transformedTable.map {
             case (_, (pTable, oTable)) => CSV.appendDelimiter(pTable) + oTable
         }
-        new TransformableRDD(joinedTable)
+        new Table(joinedTable, primaryKeyIndex)
     }
 
     private def tableByIndex(table: RDD[String], columnIndex: Int, preserve: Boolean = false): RDD[(String, String)] = {
